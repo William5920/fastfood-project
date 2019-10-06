@@ -33,7 +33,7 @@
 			transform: translateY(-50%);
 			width: 10%;
 			height: 50%;
-
+			
 			.icon-icon_sousuo {
 				font-size: 25px;
 				color: #fff;

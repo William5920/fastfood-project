@@ -6,50 +6,48 @@
 				<span class="shop_header_title">附近商家</span>
 			</div>
 			<div class="shop_container">
-				<ul class="shop_list">
-					<li class="shop_li border-1px">
+				<ul class="shop_list" v-if="shops.length">
+					<li class="shop_li border-1px" v-for="(shop, index) in shops" :key="index" @click="$router.push('/shop')">
 						<a href="javascript:;">
 							<div class="shop_left">
-								<img src="./images/shop/1.jpg" alt="" class="shop_img">
+								<img src="./images/shop/4.jpg" alt="" class="shop_img">
 							</div>
 							<div class="shop_right">
 								<section class="shop_detail_header">
-									<h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
+									<h4 class="shop_title ellipsis">{{shop.name}}</h4>
 									<ul class="shop_detail_ul">
-										<li class="supports">保</li>
-										<li class="supports">准</li>
-										<li class="supports">票</li>
+										<li class="supports" v-for="(support, index) in shop.supports" :key="index">{{ support.icon_name}}</li>
 									</ul>
 								</section>
 								<section class="shop_rating_order">
 									<section class="shop_rating_order_left">
-										<div class="star star-24">
-											<span class="star-item on"></span>
-											<span class="star-item on"></span>
-											<span class="star-item on"></span>
-											<span class="star-item half"></span>
-											<span class="star-item off"></span>
-										</div>
+										<Star :score="shop.rating" :size="24" />
+										
 										<div class="rating_section">
-											3.6
+											{{shop.rating}}
 										</div>
 										<div class="order_section">
-											月售106单
+											月售{{ shop.recent_order_num }}单
 										</div>
 									</section>
 									<section class="shop_rating_order_right">
-										<span class="delivery_style delivery_right">硅谷专送</span>
+										<span class="delivery_style delivery_right">{{ shop.delivery_mode.text }}</span>
 									</section>
 								</section>
 								<section class="shop_distance">
 									<p class="shop_delivery_msg">
-										<span>¥20起送</span>
+										<span>¥{{ shop.float_minimum_order_amount }}起送</span>
 										<span class="segmentation">/</span>
-										<span>配送费约¥5</span>
+										<span>配送费约¥{{ shop.float_delivery_fee }}</span>
 									</p>
 								</section>
 							</div>
 						</a>
+					</li>
+				</ul>
+				<ul v-else>
+					<li v-for="item in 8">
+						<img src="./images/shop_back.svg" alt="">
 					</li>
 				</ul>
 			</div>
@@ -57,8 +55,20 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
+	import Star from '../star/star.vue'
 	export default {
-
+		data() {
+			return {
+				baseImgUrl: 'http://cangdu.org:8001/img/'
+			}
+		},
+		computed: {
+			...mapState(['shops'])
+		},
+		components: {
+			Star
+		}
 	}
 </script>
 
@@ -69,6 +79,9 @@
 			@include top-border-1px(#e4e4e4);
 			margin-top: 10px;
 			background-color: #fff;
+			ul {
+			  list-style: none;
+			}
 
 			.shop_header {
 				padding: 10px 10px 0;
@@ -168,79 +181,6 @@
 									.shop_rating_order_left {
 										float: left;
 										color: #ff9a0d;
-
-										.star { //2x图 3x图
-											float: left;
-											font-size: 0;
-
-											.star-item {
-												display: inline-block;
-												background-repeat: no-repeat;
-											}
-
-											&.star-48 {
-												.star-item {
-													width: 20px;
-													height: 20px;
-													margin-right: 22px;
-													background-size: 20px 20px;
-													&:last-child {
-														margin-right: 0;
-													}
-													&.on {
-														@include bg-image('./images/stars/star48_on')
-													}
-													&.half {
-														@include bg-image('./images/stars/star48_half')
-													}
-													&.off {
-														@include bg-image('./images/stars/star48_off')
-													}
-												}
-											}
-
-											&.star-36 {
-												.star-item {
-													width: 15px;
-													height: 15px;
-													margin-right: 6px;
-													background-size: 15px 15px;
-													&:last-child {
-														margin-right: 0;
-													}
-													&.on {
-														@include bg-image('./images/stars/star36_on')
-													}
-													&.half {
-														@include bg-image('./images/stars/star36_half')
-													}
-													&.off {
-														@include bg-image('./images/stars/star36_off')
-													}
-												}
-											}
-
-											&.star-24 {
-												.star-item {
-													width: 10px;
-													height: 10px;
-													margin-right: 3px;
-													background-size: 10px 10px;
-													&:last-child {
-														margin-right: 0;
-													}
-													&.on {
-														@include bg-image('./images/stars/star24_on')
-													}
-													&.half {
-														@include bg-image('./images/stars/star24_half')
-													}
-													&.off {
-														@include bg-image('./images/stars/star24_off')
-													}
-												}
-											}
-										}
 
 										.rating_section {
 											float: left;
